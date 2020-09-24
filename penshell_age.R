@@ -1,4 +1,4 @@
-###21 september penshell age structure###
+###24 september penshell age structure###
 ##age structure model penshell (A.maura)
 ##setting working directory
 
@@ -46,8 +46,10 @@ fa <- c(0, 0, 0, 9800000, rep(9800000 , 4)) # based on egg data, fecundity at ag
 S0<-fa*R0
 
 h<-0.8 #steepness parameter 
-alpha<-(1-h/4*h*R0)*S0
+alpha_1<-(1-h/4*h*R0)*S0
+alpha<--6.27004e+14
 beta<- 5*h-1/4*h*R0
+beta
 #eggs<-1 # potential fecundity, value found in literature for a.maura, analysis of different methods to estimate fecundity in bivalves (Caceres-Puig, 2016) 
 #beverton<-Et/(alpha+beta*Et)
 
@@ -85,7 +87,7 @@ for(t in 2:(nyears)){
   eggs[t-1] <- sum(fa * b[t-1,])
   
   # Calculate number of recruits from SRR and number of eggs
-  n[t,1] <- (eggs[t-1]*alpha)/(beta+eggs[t-1])
+  n[t,1] <- (4.150044e+14*alpha)/(beta+4.150044e+14)
   
   # Calculate remaining age classes based on natural mortality
   n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:maxage-1]
