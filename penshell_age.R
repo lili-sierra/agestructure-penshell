@@ -1,16 +1,23 @@
-###28 september penshell age structure###
+###28 october penshell age structure###
 ##age structure model penshell (A.maura)
 ##setting working directory
 
 #("C:/Users/lili_/Desktop/fishpath_r")
 
+setwd("C:/Users/lili_/Desktop/fishpath_r")
+
 #time 30 years
 nyears<-30
 
 
+#lengths<-as.matrix(read.csv("lengths_atrina.csv",header=FALSE, row.names = NULL))
+#lengths_num<-as.numeric(lengths)
+##convert lengths to ages using von bertanlafy equation
+#ages=(-1/0.5)*log((1-lengths_num)/280)
+
 # Age info
-maxage <- 8 # based on lit for 26 cm, first report on the occurence of penshell a.pectinata (Sung Yang, 2015)
-age_at_maturity <- 4 # made up number for age, for size maturity is 12 cm
+maxage <- 6 # based on lit for 27 cm, first report on the occurence of penshell a.pectinata (Sung Yang, 2015)
+age_at_maturity <- 2 # age is 2 years for 12 cms according to VBF equation for size maturity is 12 cm
 ages <- 1:maxage
 
 
@@ -38,8 +45,8 @@ weight_at_age <- lw_a * length_at_age ^ lw_b
 # Survival- and fecundity-at-age vectors
 # Max age = 8, Age at maturity = 4, eggs= 9800000 
 eggs_a <- 9800000 
-s <- c(0.4, 0.4, 0.5, 0.8,0.8, rep(0.93, 3)) # found in lit for a.maura
-fa <- c(0, 0, 0, 9800000, rep(9800000 , 4)) # based on egg data, fecundity at age
+s <- c(0.1, 0.1, 0.4, 0.6,0.8,0.8) # found in lit for a.maura 
+fa <- c(0, 0, 0, 98000,9800000,9800000)  # based on egg data, fecundity at age
 #s<- we have different survival rates for different ages/stages of penshell
 #not sure how to include it.
 
@@ -76,7 +83,12 @@ b[1,] <- n0allages * weight_at_age
 # Create matrix for eggs
 eggs <- vector()
 
+#eploitation rate vector
+u<-rep(0.99,30)
 
+#vulnerabilities at age
+v<-c(0,1,1,1,1,1)
+  
 # Loop through time
 # For testing: t <- 2
 for(t in 2:(nyears)){
@@ -89,7 +101,8 @@ for(t in 2:(nyears)){
 
 
   # Calculate remaining age classes based on natural mortality
-  n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:(maxage-1)]
+  #check this line
+  n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:(maxage-1)]*(1-v[1:(maxage-1)]*u[t-1])
   
   # Convert abundance to biomass and save
   b[t,] <- n[t,] * weight_at_age
@@ -105,12 +118,12 @@ plot(1:nyears, rowSums(n), type="l", las=1, bty="n",
      xlab="Year", ylab="N")
 
 # Plot biomass over time
-plot(1:nyears, rowSums(b)/1000, type="l", las=1, bty="n", 
-     xlim=c(0, nyears), ylim=c(0, max(rowSums(b)/1000, na.rm=T)),
+plot(1:nyears, rowSums(b)/sum(b[1,]), type="l", las=1, bty="n", 
+     xlim=c(0, nyears), ylim=c(0, 1),
      xlab="Year", ylab="Biomass (kg)")
 
 # Plot stock-recruitment relationship
-plot(eggs/1000, n[2:nrow(n),1], type="l", las=1, bty="n", 
+plot(eggs/1000, n[2:nrow(n),1], type="p", las=1, bty="n", 
      xlab="Thousands of eggs", ylab="Recruits")
 
 
