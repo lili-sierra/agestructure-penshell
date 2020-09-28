@@ -43,7 +43,11 @@ fa <- c(0, 0, 0, 9800000, rep(9800000 , 4)) # based on egg data, fecundity at ag
 #s<- we have different survival rates for different ages/stages of penshell
 #not sure how to include it.
 
-S0<-sum(fa*s)
+R0<- 20000
+n0age1 <-R0
+n0allages <- c(n0age1, sapply(1:(maxage-1), function(x) n0age1*prod(s[1:x])))
+
+S0<-sum(fa*n0allages)
 
 h<-0.8 #steepness parameter 
 alpha<-(1-h)/(4*h*R0)*S0
@@ -59,9 +63,6 @@ beta
 #u<-0.1 #exploitation rate of age 1 fish
 #n1a1<-(1-v*u)*s*R0 #not sure about this equation
 
-n0age1 <- 20000
-n0allages <- c(n0age1, sapply(1:(maxage-1), function(x) n0age1*prod(s[1:x])))
-
 
 # Create matrix to hold abundance over time
 n <- matrix(data=NA, nrow=nyears, ncol=maxage)
@@ -73,7 +74,7 @@ b <- matrix(data=NA, nrow=nyears, ncol=maxage)
 b[1,] <- n0allages * weight_at_age
 
 # Create matrix for eggs
-eggs <- matrix(data=NA, nrow=nyears, ncol=maxage)
+eggs <- vector()
 
 
 # Loop through time
@@ -88,7 +89,7 @@ for(t in 2:(nyears)){
 
 
   # Calculate remaining age classes based on natural mortality
-  n[t,] <- n[t-1,] * s
+  n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:(maxage-1)]
   
   # Convert abundance to biomass and save
   b[t,] <- n[t,] * weight_at_age
