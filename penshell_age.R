@@ -1,4 +1,4 @@
-###24 september penshell age structure###
+###28 september penshell age structure###
 ##age structure model penshell (A.maura)
 ##setting working directory
 
@@ -12,7 +12,7 @@ nyears<-30
 maxage <- 8 # based on lit for 26 cm, first report on the occurence of penshell a.pectinata (Sung Yang, 2015)
 age_at_maturity <- 4 # made up number for age, for size maturity is 12 cm
 ages <- 1:maxage
-eggs<-1
+
 
 ###stock recruitment parameters###
 #write stock recruitment relationship in terms of steepness, how to do it?
@@ -43,12 +43,11 @@ fa <- c(0, 0, 0, 9800000, rep(9800000 , 4)) # based on egg data, fecundity at ag
 #s<- we have different survival rates for different ages/stages of penshell
 #not sure how to include it.
 
-S0<-fa*R0
+S0<-sum(fa*s)
 
 h<-0.8 #steepness parameter 
-alpha_1<-(1-h/4*h*R0)*S0
-alpha<--6.27004e+14
-beta<- 5*h-1/4*h*R0
+alpha<-(1-h)/(4*h*R0)*S0
+beta<- (5*h-1)/(4*h*R0)
 beta
 #eggs<-1 # potential fecundity, value found in literature for a.maura, analysis of different methods to estimate fecundity in bivalves (Caceres-Puig, 2016) 
 #beverton<-Et/(alpha+beta*Et)
@@ -73,10 +72,8 @@ n[1,] <- n0allages
 b <- matrix(data=NA, nrow=nyears, ncol=maxage)
 b[1,] <- n0allages * weight_at_age
 
-# Calculate beta
-# beta = the number of eggs produced by the initial population
-sum(fa * b[1,])
-
+# Create matrix for eggs
+eggs <- matrix(data=NA, nrow=nyears, ncol=maxage)
 
 
 # Loop through time
@@ -84,13 +81,14 @@ sum(fa * b[1,])
 for(t in 2:(nyears)){
   
   # Number of eggs = fecundity times biomass
-  eggs[t-1] <- sum(fa * b[t-1,])
+  eggs[t-1] <- sum(fa * n[t-1,])
   
-  # Calculate number of recruits from SRR and number of eggs
-  n[t,1] <- (4.150044e+14*alpha)/(beta+4.150044e+14)
-  
+  #Calculate number of recruits from SRR and # of eggs
+  n[t,1] <- eggs[t-1]/(alpha+beta*eggs[t-1])
+
+
   # Calculate remaining age classes based on natural mortality
-  n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:maxage-1]
+  n[t,] <- n[t-1,] * s
   
   # Convert abundance to biomass and save
   b[t,] <- n[t,] * weight_at_age
