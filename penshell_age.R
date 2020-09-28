@@ -76,7 +76,12 @@ b[1,] <- n0allages * weight_at_age
 # Create matrix for eggs
 eggs <- vector()
 
+#eploitation rate vector
+u<-rep(0.99,30)
 
+#vulnerabilities at age
+v<-c(0,0,0,1,1,1,1,1)
+  
 # Loop through time
 # For testing: t <- 2
 for(t in 2:(nyears)){
@@ -89,7 +94,7 @@ for(t in 2:(nyears)){
 
 
   # Calculate remaining age classes based on natural mortality
-  n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:(maxage-1)]
+  n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:(maxage-1)]*(1-v[1:(maxage-1)]*u[t-1])
   
   # Convert abundance to biomass and save
   b[t,] <- n[t,] * weight_at_age
@@ -105,12 +110,12 @@ plot(1:nyears, rowSums(n), type="l", las=1, bty="n",
      xlab="Year", ylab="N")
 
 # Plot biomass over time
-plot(1:nyears, rowSums(b)/1000, type="l", las=1, bty="n", 
-     xlim=c(0, nyears), ylim=c(0, max(rowSums(b)/1000, na.rm=T)),
+plot(1:nyears, rowSums(b)/sum(b[1,]), type="l", las=1, bty="n", 
+     xlim=c(0, nyears), ylim=c(0, 1),
      xlab="Year", ylab="Biomass (kg)")
 
 # Plot stock-recruitment relationship
-plot(eggs/1000, n[2:nrow(n),1], type="l", las=1, bty="n", 
+plot(eggs/1000, n[2:nrow(n),1], type="p", las=1, bty="n", 
      xlab="Thousands of eggs", ylab="Recruits")
 
 
