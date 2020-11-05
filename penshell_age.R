@@ -87,7 +87,11 @@ eggs <- vector()
 u<-rep(0.99,30)
 
 #vulnerabilities at age
+<<<<<<< HEAD
 v<-c(0,1,1,1,1,1)
+=======
+v<-c(0,0,0,1,1,1,1,1)
+>>>>>>> a5219f04e4f8eef80baa6671e219962a249af5c2
   
 # Loop through time
 # For testing: t <- 2
@@ -101,7 +105,10 @@ for(t in 2:(nyears)){
 
 
   # Calculate remaining age classes based on natural mortality
+<<<<<<< HEAD
   #check this line
+=======
+>>>>>>> a5219f04e4f8eef80baa6671e219962a249af5c2
   n[t,2:maxage] <- n[t-1,1:(maxage-1)] * s[1:(maxage-1)]*(1-v[1:(maxage-1)]*u[t-1])
   
   # Convert abundance to biomass and save
