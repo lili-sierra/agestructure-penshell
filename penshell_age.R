@@ -83,7 +83,10 @@ b[1,] <- n0allages * weight_at_age
 # Create matrix for eggs
 eggs <- vector()
 
-#eploitation rate vector
+#eploitation rate vector (u)
+#represent history of exploitation of this fishery in this vector
+#change this vector, each year is a representation of fishery mortality/u=exploitation
+#fishing year 0= unfished
 u<-rep(0.99,30)
 
 #vulnerabilities at age
