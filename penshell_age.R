@@ -1,25 +1,62 @@
-###5 november penshell age structure###
+###feb 1st penshell age structure###
 ##age structure model penshell (A.maura)
 ##setting working directory
 
-#("C:/Users/lili_/Desktop/fishpath_r")
+("C:/Users/lili_/Desktop/fishpath_r")
 
 setwd("C:/Users/lili_/Desktop/fishpath_r")
 
 #time 30 years
 nyears<-30
 
-
-#lengths<-as.matrix(read.csv("lengths_atrina.csv",header=FALSE, row.names = NULL))
-#lengths_num<-as.numeric(lengths)
-##convert lengths to ages using von bertanlafy equation
-#ages=(-1/0.5)*log((1-lengths_num)/280)
+#used code in MatLab
+#lengths<-as.matrix(read.csv("1feb_lengths_atrina.csv",header=TRUE, row.names = NULL))
+#lengths_mil<-lengths*10
+#convert lengths to ages using von bertanlafy equation
+#ages=-1/0.5*log(1-lengths_mil/280)
 
 # Age info
-maxage <- 6 # based on lit for 27 cm, first report on the occurence of penshell a.pectinata (Sung Yang, 2015)
+maxage <- 7 # based on dataset provided by Manglito
 age_at_maturity <- 2 # age is 2 years for 12 cms according to VBF equation for size maturity is 12 cm
 ages <- 1:maxage
 
+##unfished relative biomass per year
+
+
+
+
+
+##calculate Z for penshell
+##using ages and abundance for penshell
+ages_abun<-as.data.frame(read.csv("feb1_abun_ages_atrina_maura.csv",header=TRUE,row.names=NULL))
+abun<-ages_abun[,2]
+ages<-ages_abun[,1]
+log_abun<-log(abun)
+zmortality<-lm(formula=ages~log(abun), data=ages_abun)
+summary(zmortality)
+z_value<-0.47
+
+##z for penshell for each year
+##z 2015
+
+
+##calculation M for penshell
+##using paulys M estimator b/c it is widely used and accepted
+##paulys M estimator
+linf <- 28#cm #find out for penshell, should be higher than 30, look for another one in lit?
+k <- 0.5 #find out for penshell, growth rate found sealifebase for atrina pectinata
+T_C<-20 #got average of temperaure in celcius from seatemperature.org
+
+
+pau<-0.9840*linf^-0.279*k^0.6543*T_C^0.4634
+pau
+nmortality_value<-0.98
+
+#fishing mortality 
+fmortality_value<-0.47-0.98
+fmortality_value
+
+#exploitation rates
 
 ###stock recruitment parameters###
 #write stock recruitment relationship in terms of steepness, how to do it?
@@ -28,7 +65,8 @@ R0<-20000 # made up number for unfished recruitment
 
 ###age size parameters###
 ##found in literature, modelacion del crecimiento de de callo de hacha, noriega 2013##
-linf <- 28 #cm #find out for penshell
+
+linf <- 28 #cm #find out for penshell, should be higher than 30, look for another one in lit?
 k <- 0.5 #find out for penshell, growth rate found sealifebase for atrina pectinata
 t0 <- 0 #use 0, as used in other studies when fitting VB curve
 
