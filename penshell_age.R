@@ -1,4 +1,4 @@
-###feb 1st penshell age structure###
+###feb 2/2021 penshell age structure###
 ##age structure model penshell (A.maura)
 ##setting working directory
 
@@ -38,23 +38,56 @@ z_value<-0.47
 
 ##z for penshell for each year
 ##z 2015
+abun_ages_2015<-ages_abun<-as.data.frame(read.csv("2015_abun_ages.csv",header=TRUE,row.names=NULL))
+zmortality_2015<-lm(formula=ages~log(abun), data=abun_ages_2015)
+summary(zmortality_2015)
+
+
+#z 2016
+##wrote down 1 instead of 0 in abuundance column 
+abun_ages_2016<-ages_abun<-as.data.frame(read.csv("2016_abun_ages.csv",header=TRUE,row.names=NULL))
+zmortality_2016<-lm(formula=ages~log(abun), data=abun_ages_2016)
+summary(zmortality_2016)
+
+
+#z 2017
+abun_ages_2017<-ages_abun<-as.data.frame(read.csv("2017_abun_age.csv",header=TRUE,row.names=NULL))
+zmortality_2017<-lm(formula=ages~log(abun), data=abun_ages_2017)
+summary(zmortality_2017)
+
 
 
 ##calculation M for penshell
 ##using paulys M estimator b/c it is widely used and accepted
 ##paulys M estimator
+##using all abundances from different years as a whole
 linf <- 28#cm #find out for penshell, should be higher than 30, look for another one in lit?
 k <- 0.5 #find out for penshell, growth rate found sealifebase for atrina pectinata
 T_C<-20 #got average of temperaure in celcius from seatemperature.org
-
-
 pau<-0.9840*linf^-0.279*k^0.6543*T_C^0.4634
 pau
 nmortality_value<-0.98
 
-#fishing mortality 
+
+#fishing mortality
+#using total mortality (all z's as a whole) and natural mortality
 fmortality_value<-0.47-0.98
 fmortality_value
+
+#fishing mortalities for each year
+#fishing mortality 2015 
+fmortality_value_2015<-0.55-0.98
+fmortality_value_2015
+
+#fishing mortality 2016
+fmortality_value_2016<-0.28-0.98
+fmortality_value_2016
+
+
+#fishing mortality 2017
+fmortality_value_2017<-0.31-0.98
+fmortality_value_2017
+
 
 #exploitation rates
 
