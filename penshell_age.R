@@ -1,4 +1,4 @@
-###feb 2/2021 penshell age structure###
+###feb 9/2021 penshell age structure###
 ##age structure model penshell (A.maura)
 ##setting working directory
 
@@ -41,20 +41,20 @@ z_value<-0.47
 abun_ages_2015<-ages_abun<-as.data.frame(read.csv("2015_abun_ages.csv",header=TRUE,row.names=NULL))
 zmortality_2015<-lm(formula=ages~log(abun), data=abun_ages_2015)
 summary(zmortality_2015)
-
+# -0.5482
 
 #z 2016
 ##wrote down 1 instead of 0 in abuundance column 
 abun_ages_2016<-ages_abun<-as.data.frame(read.csv("2016_abun_ages.csv",header=TRUE,row.names=NULL))
 zmortality_2016<-lm(formula=ages~log(abun), data=abun_ages_2016)
 summary(zmortality_2016)
-
+# -0.2758
 
 #z 2017
 abun_ages_2017<-ages_abun<-as.data.frame(read.csv("2017_abun_age.csv",header=TRUE,row.names=NULL))
 zmortality_2017<-lm(formula=ages~log(abun), data=abun_ages_2017)
 summary(zmortality_2017)
-
+#-0.3142
 
 
 ##calculation M for penshell
@@ -90,6 +90,23 @@ fmortality_value_2017
 
 
 #exploitation rates
+## F(1-e^-z)/Z
+## explotiation rate 2015
+#f_lor_n*(1-exp(-zvaln))/zvaln
+e_2015<-fmortality_value_2015*(1-exp(-( -0.5482)))/ -0.5482
+e_2015
+
+
+## exploitation rate 2016
+e_2016<-fmortality_value_2016*(1-exp(-( -0.2758)))/ -0.2758
+e_2016
+
+
+##exploitation rate 2017
+e_2017<-fmortality_value_2017*(1-exp(-( -0.3142)))/ -0.3142
+e_2017
+
+
 
 ###stock recruitment parameters###
 #write stock recruitment relationship in terms of steepness, how to do it?
