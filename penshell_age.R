@@ -110,8 +110,6 @@ e_2017
 
 ###stock recruitment parameters###
 #write stock recruitment relationship in terms of steepness, how to do it?
-R0<-20000 # made up number for unfished recruitment
-#fit beverton holt relationship
 
 ###age size parameters###
 ##found in literature, modelacion del crecimiento de de callo de hacha, noriega 2013##
@@ -138,7 +136,7 @@ fa <- c(0, 0, 0, 98000,9800000,9800000)  # based on egg data, fecundity at age
 #s<- we have different survival rates for different ages/stages of penshell
 #not sure how to include it.
 
-R0<- 20000
+R0<- 200000000000
 n0age1 <-R0
 n0allages <- c(n0age1, sapply(1:(maxage-1), function(x) n0age1*prod(s[1:x])))
 
@@ -175,7 +173,7 @@ eggs <- vector()
 #represent history of exploitation of this fishery in this vector
 #change this vector, each year is a representation of fishery mortality/u=exploitation
 #fishing year 0= unfished
-u<-rep(0.99,30)
+u<-rep(0,30)
 
 #vulnerabilities at age
 
@@ -211,6 +209,12 @@ for(t in 2:(nyears)){
 plot(1:nyears, rowSums(n), type="l", las=1, bty="n", 
      xlim=c(0, nyears), ylim=c(0, max(rowSums(n), na.rm=T)),
      xlab="Year", ylab="N")
+
+# vulnerable abundance size over time
+plot(1:nyears, rowSums(n[,2:7]), type="l", las=1, bty="n", 
+     xlim=c(0, nyears), ylim=c(0, max(rowSums(n), na.rm=T)),
+     xlab="Year", ylab="N")
+
 
 # Plot biomass over time
 plot(1:nyears, rowSums(b)/sum(b[1,]), type="l", las=1, bty="n", 
